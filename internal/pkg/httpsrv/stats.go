@@ -17,12 +17,9 @@ func (w *sessionStats) inc() {
 
 func (s *Server) incStats(id string) {
 	// Find and increment.
-	for _, ws := range s.sessionStats {
-		if ws.id == id {
-			ws.inc()
-			return
-		}
+	if ws, exists := s.sessionStats[id]; exists {
+		ws.inc()
+	} else {
+		s.sessionStats[id] = &sessionStats{id: id, sent: 1}
 	}
-	// Not found, add new.
-	s.sessionStats = append(s.sessionStats, sessionStats{id: id, sent: 1})
 }
