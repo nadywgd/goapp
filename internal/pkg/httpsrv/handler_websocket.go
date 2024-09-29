@@ -26,7 +26,8 @@ func (s *Server) handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 	// Start WS.
 	var upgrader = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
-			return true
+			origin := r.Header.Get("Origin")
+			return origin == "http://localhost:8080"
 		},
 	}
 
@@ -61,12 +62,22 @@ func (s *Server) handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 					}
 					return
 				}
+
 				var m watcher.CounterReset
 				if err := json.Unmarshal(p, &m); err != nil {
 					log.Printf("failed to unmarshal message: %v\n", err)
 					continue
 				}
+
+				// Validate the action
+				if m.Action != "reset" {
+					log.Printf("invalid action: %s\n", m.Action)
+					continue
+				}
+
+				log.Printf("Resetting counter with value: %d\n", m.Value)
 				watch.ResetCounter()
+
 			case <-doneCh:
 				return
 			case <-s.quitChannel:
