@@ -78,5 +78,5 @@ You can change the message and send multiple times.
 </td></tr></table>
 </body>
 </html>
-`)).Execute(w, "ws://"+r.Host+"/goapp/ws")
+`)).Execute(w, "ws://"+r.Host+"/goapp/hex/ws")
 }

@@ -34,6 +34,12 @@ func (s *Server) myRoutes() []Route {
 			Pattern: "/goapp",
 			HFunc:   s.handlerWrapper(s.handlerHome),
 		},
+		{
+			Name:    "hexWebSocket",
+			Method:  "GET",
+			Pattern: "/goapp/hex/ws",
+			HFunc:   s.handlerWrapper(s.handlerHexWebSocket),
+		},
 	}
 }
 
